@@ -1,0 +1,131 @@
+/* Large Deivces */
+@media screen and (max-width: 1200px) {}
+
+/* 1024 */
+@media screen and (max-width: 1024px) {
+    .row-gap {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .projects .project-content .phi-vid {
+        width: auto;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%);
+    }
+
+    .projects .project-content .project-padd {
+        height: auto;
+        padding: 3rem;
+    }
+}
+
+/* Tablet */
+@media screen and (max-width: 768px) {
+    .box-marquee .circle-list {
+        height: 25px;
+        width: 25px;
+    }
+
+    .skills-img {
+        height: 60px;
+        /* width: 50px; */
+    }
+}
+
+/* Phone */
+@media screen and (max-width: 480px) {
+    .container-cs {
+        padding: 0 1.5rem;
+    }
+
+    .navbar {
+        padding: 1.5rem !important;
+    }
+
+    .navbar-custom {
+        background-color: var(--white-shade);
+        margin-top: 30px;
+        border-radius: 8px;
+    }
+
+    .navbar-custom .navbar-nav {
+        padding: 20px;
+    }
+
+    .navbar-custom .nav-item .nav-link {
+        color: var(--black-shade) !important;
+    }
+
+    .navbar-nav-custom {
+        gap: 15px;
+    }
+
+    .logo-img {
+        width: 105px;
+    }
+
+    .heading-contents .heading-span span img {
+        display: none;
+    }
+
+    .projects .project-content .phi-vid {
+        width: 80%;
+    }
+
+    .heading-contents .heading-span .main-span {
+        width: 80% !important;
+    }
+
+    .content-desc .social-icons img {
+        width: 25px;
+        height: 25px;
+    }
+
+    .content-desc .social-icons {
+        gap: 15px;
+    }
+
+    .video-box video {
+        height: auto;
+        object-fit: fill;
+        width: 100%;
+        border-radius: 40px;
+    }
+
+    .section-content .content-img .profile-img {
+        border-radius: 40px;
+    }
+
+    .heading-padd {
+        padding: 0 20px;
+    }
+
+    .projects .project-content .phi-vid {
+        display: none;
+        position: relative;
+        width: 100%;
+        padding: 20px 37px;
+        top: 0 !important;
+        left: 0 !important;
+        transform: translate(0px, 0px);
+    }
+
+    .project-content .project-desc {
+        width: 100%;
+    }
+
+    .projects .project-content .project-padd {
+        align-items: flex-start;
+        padding: 3rem 1.5rem;
+    }
+
+    .projects .project-content:hover .phi-vid {
+        display: block !important;
+    }
+
+    .thanks {
+        padding-top: 3rem;
+    }
+}

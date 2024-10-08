@@ -1,0 +1,175 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+   <style>
+      /* body {
+  font-family: system-ui;
+  background: #111;
+  color: white;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+} */
+
+.wrapper-marquee {
+  height: 30%;
+  width: 100%;
+  /* background: #555; */
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.box-marquee {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 20%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* .box img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+} */
+
+/* h1 {
+  position: absolute;
+  top: 10%;
+  width: 100%;
+  text-align: center;
+} */
+   </style>
+ </head>
+ <body>
+<!-- 
+  <div class="wrapper-marquee">
+    <div class="box-marquee">
+      <div class="circle-list"></div>
+      <div class="box-content">
+        <img src="assets/images/skills/html.png" alt="">
+        <div class="heading-1">HTML</div>
+      </div>
+    </div>
+    <div class="box-marquee">
+      <div class="circle-list"></div>
+      <div class="box-content">
+        <img src="assets/images/skills/css.png" alt="">
+        <div class="heading-1">CSS</div>
+      </div>
+    </div>
+    <div class="box-marquee">
+      <div class="circle-list"></div>
+      <div class="box-content">
+        <img src="assets/images/skills/figma.png" alt="">
+        <div class="heading-1">Figma</div>
+      </div>
+    </div>
+    <div class="box-marquee">
+      <div class="circle-list"></div>
+      <div class="box-content">
+        <img src="assets/images/skills/bootstrap.png" alt="">
+        <div class="heading-1">Bootstrap</div>
+      </div>
+    </div>
+    <div class="box-marquee">
+      <div class="circle-list"></div>
+      <div class="box-content">
+        <img src="assets/images/skills/Tailwind.png" alt="">
+        <div class="heading-1">Tailwind</div>
+      </div>
+    </div>
+    <div class="box-marquee">
+      <div class="circle-list"></div>
+      <div class="box-content">
+        <img src="assets/images/skills/javascript.png" alt="">
+        <div class="heading-1">Javascript</div>
+      </div>
+    </div>
+  </div>
+   <script src="https://unpkg.co/gsap@3/dist/gsap.min.js"></script>
+   <script>
+   const wrapper = document.querySelector(".wrapper-marquee");
+const boxes = gsap.utils.toArray(".box-marquee");
+
+const loop = horizontalLoop(boxes, {
+  paused: false,
+  repeat: -1,
+  speed: 1.25,
+});
+
+function horizontalLoop(items, config) {
+	items = gsap.utils.toArray(items);
+	config = config || {};
+	let tl = gsap.timeline({repeat: config.repeat, paused: config.paused, defaults: {ease: "none"}, onReverseComplete: () => tl.totalTime(tl.rawTime() + tl.duration() * 100)}),
+		length = items.length,
+		startX = items[0].offsetLeft,
+		times = [],
+		widths = [],
+		xPercents = [],
+		curIndex = 0,
+		pixelsPerSecond = (config.speed || 1) * 100,
+		snap = config.snap === false ? v => v : gsap.utils.snap(config.snap || 1), // some browsers shift by a pixel to accommodate flex layouts, so for example if width is 20% the first element's width might be 242px, and the next 243px, alternating back and forth. So we snap to 5 percentage points to make things look more natural
+		totalWidth, curX, distanceToStart, distanceToLoop, item, i;
+	gsap.set(items, { // convert "x" to "xPercent" to make things responsive, and populate the widths/xPercents Arrays to make lookups faster.
+		xPercent: (i, el) => {
+			let w = widths[i] = parseFloat(gsap.getProperty(el, "width", "px"));
+			xPercents[i] = snap(parseFloat(gsap.getProperty(el, "x", "px")) / w * 100 + gsap.getProperty(el, "xPercent"));
+			return xPercents[i];
+		}
+	});
+	gsap.set(items, {x: 0});
+	totalWidth = items[length-1].offsetLeft + xPercents[length-1] / 100 * widths[length-1] - startX + items[length-1].offsetWidth * gsap.getProperty(items[length-1], "scaleX") + (parseFloat(config.paddingRight) || 0);
+	for (i = 0; i < length; i++) {
+		item = items[i];
+		curX = xPercents[i] / 100 * widths[i];
+		distanceToStart = item.offsetLeft + curX - startX;
+		distanceToLoop = distanceToStart + widths[i] * gsap.getProperty(item, "scaleX");
+		tl.to(item, {xPercent: snap((curX - distanceToLoop) / widths[i] * 100), duration: distanceToLoop / pixelsPerSecond}, 0)
+		  .fromTo(item, {xPercent: snap((curX - distanceToLoop + totalWidth) / widths[i] * 100)}, {xPercent: xPercents[i], duration: (curX - distanceToLoop + totalWidth - curX) / pixelsPerSecond, immediateRender: false}, distanceToLoop / pixelsPerSecond)
+		  .add("label" + i, distanceToStart / pixelsPerSecond);
+		times[i] = distanceToStart / pixelsPerSecond;
+	}
+	function toIndex(index, vars) {
+		vars = vars || {};
+		(Math.abs(index - curIndex) > length / 2) && (index += index > curIndex ? -length : length); // always go in the shortest direction
+		let newIndex = gsap.utils.wrap(0, length, index),
+			time = times[newIndex];
+		if (time > tl.time() !== index > curIndex) { // if we're wrapping the timeline's playhead, make the proper adjustments
+			vars.modifiers = {time: gsap.utils.wrap(0, tl.duration())};
+			time += tl.duration() * (index > curIndex ? 1 : -1);
+		}
+		curIndex = newIndex;
+		vars.overwrite = true;
+		return tl.tweenTo(time, vars);
+	}
+	tl.next = vars => toIndex(curIndex+1, vars);
+	tl.previous = vars => toIndex(curIndex-1, vars);
+	tl.current = () => curIndex;
+	tl.toIndex = (index, vars) => toIndex(index, vars);
+	tl.times = times;
+  tl.progress(1, true).progress(0, true); // pre-render for performance
+  if (config.reversed) {
+    tl.vars.onReverseComplete();
+    tl.reverse();
+  }
+	return tl;
+} -->
+    sc
+   </script>
+ </body>
+ </html>
+ 
