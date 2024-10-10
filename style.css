@@ -762,11 +762,5 @@ input:focus-visible {
     transition: 0.3s;
 }
 .thanks{
-    padding-top: 5rem;
-}
-.thanks-text {
-    line-height: normal;
-    font-size: 18.3vw;
-    font-weight: 600;
-    color: #494747;
+    padding-top: 7rem;
 }
